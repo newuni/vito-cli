@@ -25,9 +25,16 @@ function loadEnv() {
 }
 
 export function getConfig() {
-  const env = loadEnv();
-  const url = process.env.VITO_URL || env.VITO_URL;
-  const token = process.env.VITO_TOKEN || env.VITO_TOKEN;
+  // Environment variables take priority (empty string means unset for testing)
+  const envUrl = process.env.VITO_URL;
+  const envToken = process.env.VITO_TOKEN;
+  
+  // If env vars are explicitly set (even empty), don't read .env file
+  const fileEnv = (envUrl === undefined && envToken === undefined) ? loadEnv() : {};
+  
+  const url = envUrl || fileEnv.VITO_URL;
+  const token = envToken || fileEnv.VITO_TOKEN;
+  
   if (!url || !token) return null;
   return { url, token };
 }
