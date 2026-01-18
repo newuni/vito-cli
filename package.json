@@ -1,6 +1,6 @@
 {
   "name": "vito-cli",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Unofficial CLI client for Vito Deploy API",
   "type": "module",
   "bin": {
