@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
+import { createInterface } from 'readline';
 import { VitoClient } from './client.js';
-import { getConfig, requireConfig } from './config.js';
+import { getConfig, requireConfig, saveConfig, getConfigPath } from './config.js';
 
 const program = new Command();
 
@@ -25,17 +26,62 @@ program
   .description('CLI for Vito Deploy API')
   .version('1.0.0');
 
+// Setup
+program
+  .command('setup')
+  .description('Interactive setup wizard')
+  .action(async () => {
+    const rl = createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    const question = (q) => new Promise((resolve) => rl.question(q, resolve));
+
+    console.log('\n🚀 Vito CLI Setup\n');
+    console.log('Get your API token from: Settings → API Tokens in Vito Deploy\n');
+
+    const url = await question('Vito URL (e.g., https://vito.example.com): ');
+    const token = await question('API Token: ');
+    rl.close();
+
+    if (!url || !token) {
+      console.error('\n❌ URL and token are required');
+      process.exit(1);
+    }
+
+    // Validate connection
+    console.log('\n🔍 Validating connection...');
+    try {
+      const client = new VitoClient(url.trim(), token.trim());
+      const health = await client.health();
+      console.log(`✅ Connected to Vito ${health.version || ''}`);
+    } catch (e) {
+      console.error('❌ Connection failed:', e.message);
+      process.exit(1);
+    }
+
+    // Save config
+    const configPath = saveConfig({ 
+      url: url.trim(), 
+      token: token.trim() 
+    });
+    console.log(`\n✅ Config saved to ${configPath}`);
+    console.log('\nRun `vito status` to see your projects.\n');
+  });
+
 // Config
 program
   .command('config')
   .description('Show current configuration')
   .action(() => {
     const cfg = getConfig();
+    console.log('Config file:', getConfigPath());
     if (cfg) {
       console.log('URL:', cfg.url);
       console.log('Token:', cfg.token ? '***' + cfg.token.slice(-4) : 'not set');
     } else {
-      console.log('Not configured. Create .env file or set VITO_URL and VITO_TOKEN env vars.');
+      console.log('\nNot configured. Run: vito setup');
     }
   });
 

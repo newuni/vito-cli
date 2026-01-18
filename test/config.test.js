@@ -1,4 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { existsSync, unlinkSync, mkdirSync } from 'fs';
+import { join } from 'path';
+import { homedir } from 'os';
 
 describe('config', () => {
   const originalEnv = { ...process.env };
@@ -85,6 +88,37 @@ describe('config', () => {
 
       mockExit.mockRestore();
       mockError.mockRestore();
+    });
+  });
+
+  describe('saveConfig', () => {
+    const testConfigPath = join(homedir(), '.config', 'vito', 'config.json');
+
+    afterEach(() => {
+      // Cleanup test config if created
+      if (existsSync(testConfigPath)) {
+        try { unlinkSync(testConfigPath); } catch {}
+      }
+    });
+
+    it('should save config to ~/.config/vito/config.json', async () => {
+      process.env.VITO_URL = '';
+      process.env.VITO_TOKEN = '';
+
+      const { saveConfig, getConfigPath } = await import('../src/config.js');
+      
+      const path = saveConfig({ url: 'http://saved:8080', token: 'saved-token' });
+      
+      expect(path).toContain('.config/vito/config.json');
+      expect(existsSync(path)).toBe(true);
+    });
+
+    it('should return correct config path', async () => {
+      const { getConfigPath } = await import('../src/config.js');
+      
+      const path = getConfigPath();
+      
+      expect(path).toContain('.config/vito/config.json');
     });
   });
 });

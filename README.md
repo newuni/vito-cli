@@ -21,23 +21,22 @@ npm link
 
 ## Configuration
 
-First, generate an API token in Vito Deploy (Settings → API Tokens).
-
-Set environment variables:
+Run the interactive setup:
 
 ```bash
-export VITO_URL=http://your-vito:8080
+vito setup
+```
+
+This will prompt for your Vito URL and API token, validate the connection, and save credentials to `~/.config/vito/config.json`.
+
+### Alternative: Environment Variables
+
+```bash
+export VITO_URL=https://your-vito:8080
 export VITO_TOKEN=your-token
 ```
 
-Or add to your shell profile (`~/.bashrc`, `~/.zshrc`):
-
-```bash
-echo 'export VITO_URL=http://your-vito:8080' >> ~/.bashrc
-echo 'export VITO_TOKEN=your-token' >> ~/.bashrc
-```
-
-Verify config:
+### Verify config
 
 ```bash
 vito config
