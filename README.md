@@ -1,5 +1,7 @@
 # Vito CLI
 
+> ⚠️ **Unofficial project** — This CLI is NOT affiliated with, endorsed by, or related to [Vito Deploy](https://vitodeploy.com) in any way. It's an independent tool that uses their public API.
+
 CLI client for Vito Deploy API.
 
 ## Setup
