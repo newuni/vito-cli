@@ -5,7 +5,8 @@ CLI client for Vito Deploy API.
 ## Setup
 
 ```bash
-cd .
+git clone https://github.com/newuni/vito-cli.git
+cd vito-cli
 npm install
 npm link  # Makes 'vito' command available globally
 ```
@@ -13,15 +14,6 @@ npm link  # Makes 'vito' command available globally
 ## Configuration
 
 First, generate an API token in Vito Deploy (Settings → API Tokens).
-
-```bash
-vito config --url http://YOUR_VITO_HOST:8080 --token YOUR_TOKEN
-vito config --show  # Verify config
-```
-
-Config is stored in `~/.vitocli.json`.
-
-### Quick Setup
 
 ```bash
 cp .env.example .env
@@ -33,6 +25,12 @@ Or use environment variables:
 ```bash
 export VITO_URL=http://your-vito:8080
 export VITO_TOKEN=your-token
+```
+
+Verify config:
+
+```bash
+vito config
 ```
 
 ## Usage
@@ -96,6 +94,6 @@ vito status  # Human-readable overview
 ```javascript
 import { VitoClient } from './src/client.js';
 
-const client = new VitoClient('http://YOUR_VITO_HOST:8080', 'your-token');
+const client = new VitoClient('http://your-vito:8080', 'your-token');
 const projects = await client.listProjects();
 ```
