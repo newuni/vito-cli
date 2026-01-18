@@ -1,17 +1,36 @@
 {
   "name": "vito-cli",
   "version": "1.0.0",
-  "description": "CLI client for Vito Deploy API",
+  "description": "Unofficial CLI client for Vito Deploy API",
   "type": "module",
   "bin": {
-    "vito": "./src/cli.js"
+    "vito": "src/cli.js"
   },
+  "files": [
+    "src/"
+  ],
   "scripts": {
     "start": "node src/cli.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/newuni/vito-cli.git"
+  },
+  "keywords": [
+    "vito",
+    "vitodeploy",
+    "server",
+    "management",
+    "cli",
+    "devops"
+  ],
+  "author": "newuni",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/newuni/vito-cli/issues"
+  },
+  "homepage": "https://github.com/newuni/vito-cli#readme",
   "dependencies": {
     "commander": "^12.0.0"
-  },
-  "author": "newuni",
-  "license": "MIT"
+  }
 }
