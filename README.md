@@ -4,29 +4,37 @@
 
 CLI client for Vito Deploy API.
 
-## Setup
+## Installation
+
+```bash
+npm install -g vito-cli
+```
+
+### From source
 
 ```bash
 git clone https://github.com/newuni/vito-cli.git
 cd vito-cli
 npm install
-npm link  # Makes 'vito' command available globally
+npm link
 ```
 
 ## Configuration
 
 First, generate an API token in Vito Deploy (Settings → API Tokens).
 
-```bash
-cp .env.example .env
-# Edit .env with your URL and token
-```
-
-Or use environment variables:
+Set environment variables:
 
 ```bash
 export VITO_URL=http://your-vito:8080
 export VITO_TOKEN=your-token
+```
+
+Or add to your shell profile (`~/.bashrc`, `~/.zshrc`):
+
+```bash
+echo 'export VITO_URL=http://your-vito:8080' >> ~/.bashrc
+echo 'export VITO_TOKEN=your-token' >> ~/.bashrc
 ```
 
 Verify config:
