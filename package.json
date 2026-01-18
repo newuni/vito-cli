@@ -1,0 +1,17 @@
+{
+  "name": "vito-cli",
+  "version": "1.0.0",
+  "description": "CLI client for Vito Deploy API",
+  "type": "module",
+  "bin": {
+    "vito": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js"
+  },
+  "dependencies": {
+    "commander": "^12.0.0"
+  },
+  "author": "newuni",
+  "license": "MIT"
+}
