@@ -23,11 +23,16 @@ Config is stored in `~/.vitocli.json`.
 
 ### Quick Setup
 
-Copy the example config and edit with your credentials:
+```bash
+cp .env.example .env
+# Edit .env with your URL and token
+```
+
+Or use environment variables:
 
 ```bash
-cp .vitocli.example.json ~/.vitocli.json
-# Edit ~/.vitocli.json with your URL and token
+export VITO_URL=http://your-vito:8080
+export VITO_TOKEN=your-token
 ```
 
 ## Usage

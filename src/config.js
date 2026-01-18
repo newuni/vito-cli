@@ -1,28 +1,42 @@
-import { readFileSync, writeFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import { homedir } from 'os';
+import { readFileSync, existsSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
-const CONFIG_PATH = join(homedir(), '.vitocli.json');
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const ENV_PATH = join(__dirname, '..', '.env');
 
-export function getConfig() {
-  if (!existsSync(CONFIG_PATH)) {
-    return null;
+function loadEnv() {
+  if (!existsSync(ENV_PATH)) return {};
+  const content = readFileSync(ENV_PATH, 'utf-8');
+  const env = {};
+  for (const line of content.split('\n')) {
+    const match = line.match(/^\s*([\w]+)\s*=\s*(.*)?\s*$/);
+    if (match) {
+      let value = match[2] || '';
+      // Remove quotes if present
+      if ((value.startsWith('"') && value.endsWith('"')) || 
+          (value.startsWith("'") && value.endsWith("'"))) {
+        value = value.slice(1, -1);
+      }
+      env[match[1]] = value;
+    }
   }
-  try {
-    return JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
-  } catch {
-    return null;
-  }
+  return env;
 }
 
-export function saveConfig(config) {
-  writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+export function getConfig() {
+  const env = loadEnv();
+  const url = process.env.VITO_URL || env.VITO_URL;
+  const token = process.env.VITO_TOKEN || env.VITO_TOKEN;
+  if (!url || !token) return null;
+  return { url, token };
 }
 
 export function requireConfig() {
   const config = getConfig();
-  if (!config || !config.url || !config.token) {
-    console.error('❌ Not configured. Run: vito config --url <URL> --token <TOKEN>');
+  if (!config) {
+    console.error('❌ Not configured. Create .env file with VITO_URL and VITO_TOKEN');
+    console.error('   Or set environment variables VITO_URL and VITO_TOKEN');
     process.exit(1);
   }
   return config;
