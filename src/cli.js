@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from 'commander';
 import { VitoClient } from './client.js';
-import { getConfig, saveConfig, requireConfig } from './config.js';
+import { getConfig, requireConfig } from './config.js';
 
 const program = new Command();
 
@@ -28,26 +28,15 @@ program
 // Config
 program
   .command('config')
-  .description('Configure Vito CLI')
-  .option('--url <url>', 'Vito API URL')
-  .option('--token <token>', 'API token')
-  .option('--show', 'Show current config')
-  .action((opts) => {
-    if (opts.show) {
-      const cfg = getConfig();
-      if (cfg) {
-        console.log('URL:', cfg.url);
-        console.log('Token:', cfg.token ? '***' + cfg.token.slice(-4) : 'not set');
-      } else {
-        console.log('Not configured');
-      }
-      return;
+  .description('Show current configuration')
+  .action(() => {
+    const cfg = getConfig();
+    if (cfg) {
+      console.log('URL:', cfg.url);
+      console.log('Token:', cfg.token ? '***' + cfg.token.slice(-4) : 'not set');
+    } else {
+      console.log('Not configured. Create .env file or set VITO_URL and VITO_TOKEN env vars.');
     }
-    const cfg = getConfig() || {};
-    if (opts.url) cfg.url = opts.url;
-    if (opts.token) cfg.token = opts.token;
-    saveConfig(cfg);
-    console.log('✅ Config saved to ~/.vitocli.json');
   });
 
 // Health
